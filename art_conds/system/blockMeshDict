@@ -1,0 +1,236 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  v2306                                 |
+|   \\  /    A nd           | Website:  www.openfoam.com                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    object      blockMeshDict;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+scale     0.001;
+
+height	  45;
+
+left      0;
+
+
+cowlRight 90;
+right    120;
+
+
+// 2273152.33 
+// try new total pressure + total temp
+
+// scale variables - based on the length of each block section
+
+rA      1.5;
+rB1     #eval "$rA*22./15.";
+rB2     #eval "$rA*10./15.";
+iX1     #eval "$rA*28./15.";
+cT      #eval "$rA*17./15.";
+
+
+// x
+
+leftX	40;
+
+rampA	#eval "round($leftX*$rA)";
+rampB1	#eval "round($leftX*$rB1)";
+rampB2  #eval "round($leftX*$rB2)";
+inletX1 #eval "round($leftX*$iX1)";
+inletX2 #eval "round($leftX*$iX1)";
+scaleCowlTop #eval "round($leftX*$cT)";
+
+
+// y
+
+rY       1.25;
+scaleYBot    #eval "round($leftX*$rY)";
+
+scaleYTop    #eval "round($scaleYBot*.5)";
+
+
+
+// grading
+bottomGrad   ((.5 1 20) (.5 1 .05));
+topGrad      #eval "round(pow($rY,20))";
+
+leftGrad     #eval "pow(.33,$leftX/$rampA)";
+rightGrad    4;
+cowlTopGrad  $topGrad;
+
+
+
+
+
+vertices
+(
+    ($left 0. 0.)
+    (15. 0. 0.)
+    (30. 1.9987 0.)
+    (52 8.1871 0.)
+    (62. 11. 0.)
+    (90. 11. 0.)
+    (120. 11. 0.)
+    (120. 20.430025 0.)
+    (90. 20.430025 0.)
+    (66. 20.430025 0.)
+    (52. 18.430025 0.)
+    (69. 24.430025 0.)
+    (90. 24.430025 0.)
+    (120. 24.430025 0.)
+    (120. $height 0.)
+    (90. $height 0.)
+    (69. $height 0.)
+    (52. $height 0.)
+    (30. $height 0.)
+    (15. $height 0.)
+    ($left $height 0.)
+    ($left 15. 0.)
+    (15. 15. 0.)
+    (30. 16.5 0.)
+    ($left. 0. 1.)
+    (15. 0. 1.)
+    (30. 1.9987629652023315 1.)
+    (52 8.1871 1.)
+    (62. 11. 1.)
+    (90. 11. 1.)
+    (120. 11. 1.)
+    (120. 20.430025 1.)
+    (90. 20.430025 1.)
+    (66. 20.430025 1.)
+    (52. 18.430025 1.)
+    (69. 24.430025 1.)
+    (90. 24.430025 1.)
+    (120. 24.430025 1.)
+    (120. $height 1.)
+    (90. $height 1.)
+    (69. $height 1.)
+    (52. $height 1.)
+    (30. $height 1.)
+    (15. $height 1.)
+    ($left $height 1.)
+    ($left 15. 1.)
+    (15. 15. 1.)
+    (30. 16.5 1.)
+);
+
+blocks
+(
+    hex (0 1 22 21 24 25 46 45) block0 ($leftX $scaleYBot 1) simpleGrading ($leftGrad $bottomGrad 1) // 0 bottom
+    hex (1 2 23 22 25 26 47 46) block1 ($rampA $scaleYBot 1) simpleGrading (1 $bottomGrad 1) // 1
+    hex (2 3 10 23 26 27 34 47) block2 ($rampB1 $scaleYBot 1) simpleGrading (1 $bottomGrad 1) // 2 --2/3 int. is A_i
+    hex (3 4 9 10 27 28 33 34) block3 ($rampB2 $scaleYBot 1) simpleGrading (1 $bottomGrad 1) // 3
+    hex (4 5 8 9 28 29 32 33) block4 ($inletX1 $scaleYBot 1) simpleGrading (1 $bottomGrad 1) // 4 A_e int. 4/5
+    hex (5 6 7 8 29 30 31 32) block5 ($inletX2 $scaleYBot 1) simpleGrading (1 $bottomGrad 1) // 5 // primary outlet ?
+    hex (21 22 19 20 45 46 43 44) block6 ($leftX $scaleYBot 1) simpleGrading ($leftGrad $topGrad 1) // 6 top
+    hex (22 23 18 19 46 47 42 43) block7 ($rampA $scaleYBot 1) simpleGrading (1 $topGrad 1) // 7
+    hex (23 10 17 18 47 34 41 42) block8 ($rampB1 $scaleYBot 1) simpleGrading (1 $topGrad 1) // 8
+    hex (10 11 16 17 34 35 40 41) block9 ($scaleCowlTop $scaleYBot 1) simpleGrading (1 $topGrad 1) // 9
+    
+);
+
+    // hex (11 12 15 16 35 36 39 40) ($rightXTop $scaleYBot 1) simpleGrading ($rightGrad $topGrad 1) // 10
+    //hex (12 13 14 15 36 37 38 39) ($rightXTop2 $scaleYBot 1) simpleGrading (1 $topGrad 1) // 11 // space above cowl
+
+edges
+(
+);
+
+boundary
+(
+    inlet1
+   {
+        type patch;
+        faces
+        (
+            (0 24 45 21)
+            (21 45 44 20)
+        );
+    }
+
+    outlet1
+   {
+        type patch;
+        faces
+        (
+            (6 7 31 30)
+        );
+    }
+
+    outlet2
+   {
+        type patch;
+        faces
+        (
+            (11 16 40 35)
+            // (12 15 39 36)
+            // (13 14 38 37) // space above cowl
+        );
+    }
+
+    bottom
+   {
+        type patch; // symmetryPlane; // not symmetry, that's .org
+        faces
+        (
+            (0 1 25 24)
+        );
+    }
+
+    top
+   {
+        type patch;
+        faces
+        (
+            (20 44 43 19)
+            (19 43 42 18)
+            (18 42 41 17)
+            (17 41 40 16)
+            //(16 40 39 15)
+            // (15 39 38 14) // space above cowl
+        );
+    }
+
+    wall1
+   {
+        type wall;
+        faces
+        (
+            (1 2 26 25)
+            (2 3 27 26)
+            (3 4 28 27)
+            (4 5 29 28)
+            (5 6 30 29)
+        );
+    }
+
+    wall2
+   {
+        type wall;
+        faces
+        (
+            (10 34 33 9)
+            (9 33 32 8)
+            (8 32 31 7)
+            (10 11 35 34)
+            //(11 12 36 35)
+            // (12 13 37 36) // space above cowl
+        );
+    }
+
+);
+
+mergePatchPairs
+(
+);
+
+
+// ************************************************************************* //

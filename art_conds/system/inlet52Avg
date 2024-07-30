@@ -1,0 +1,16 @@
+type            surfaceFieldValue;
+libs            (fieldFunctionObjects);
+regionType      faceZone;
+name            inlet52;
+operation       average;
+writeFields	no;
+
+executeControl      writeTime;
+executeInterval     1;
+writeControl        writeTime;
+writeInterval       1;
+
+fields
+(
+    p
+);

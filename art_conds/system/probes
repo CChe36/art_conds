@@ -1,0 +1,23 @@
+libs            (sampling);
+type            probes;
+
+
+executeControl      writeTime;
+executeInterval     1;
+writeControl        writeTime;
+writeInterval       1;
+
+
+fields
+(
+    p
+);
+
+probeLocations
+(
+    (0.09 0.011 0) // at end of inlet
+    (0.062 .011 0) // start of flat
+    (0.052 .0082 0) // under cowl
+    (0.012 0.011 0) // bottom of end of virtual inlet expansion
+    (0.012 0.015715 0) // middle of end of virtual inlet expansion
+);

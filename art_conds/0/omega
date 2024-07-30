@@ -1,0 +1,48 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  v2306                                 |
+|   \\  /    A nd           | Website:  www.openfoam.com                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       volScalarField;
+    object      omega;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+dimensions      [0 0 -1 0 0 0 0]; // kg m s K mol A cd
+// calculated from https://www.cfd-online.com/Tools/turbulence.php
+internalField   uniform 50921.2330981617; 
+
+boundaryField
+{
+    "(wall1|wall2).*"
+    {
+        type            omegaWallFunction;
+        value           $internalField;
+    }
+
+    "(inlet1|outlet1|outlet2|top).*"
+    {
+        type            zeroGradient;
+    }
+
+
+    bottom
+    {
+        type            zeroGradient;
+    }
+
+
+    defaultFaces
+    {
+        type            empty;
+    }
+}
+
+
+// ************************************************************************* //

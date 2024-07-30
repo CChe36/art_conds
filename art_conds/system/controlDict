@@ -1,0 +1,80 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  v2306                                 |
+|   \\  /    A nd           | Website:  www.openfoam.com                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    object      controlDict;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+application     rhoCentralFoam;
+
+startFrom       startTime;
+
+startTime       0;
+
+stopAt          endTime;
+
+endTime         0.025;
+
+deltaT          5e-8;
+
+writeControl    adjustable;
+
+writeInterval   .001;
+
+purgeWrite      0;
+
+writeFormat     ascii;
+
+writePrecision  9;
+
+writeCompression off;
+
+timeFormat      general;
+
+timePrecision   6;
+
+graphFormat     raw;
+
+runTimeModifiable true;
+
+adjustTimeStep  yes;
+
+maxCo           0.5;
+
+maxDeltaT       .0025;
+
+functions
+{
+
+    #includeFunc "yPlus"
+
+    #includeFunc "probes"
+    
+    #includeFunc "bottomSurfacePres"
+    #includeFunc "cowlSurfacePres"
+
+    #includeFunc "inletMFR"
+    #includeFunc "inletAvg"
+
+    #includeFunc "outletMFR"
+    #includeFunc "outletAvg"
+    #includeFunc "outletAvgWeight"
+    
+    #includeFunc "inlet52MFR"
+    #includeFunc "inlet52Avg"
+    #includeFunc "outlet90MFR"
+    #includeFunc "outlet90Avg"
+
+}
+
+
+// ************************************************************************* //

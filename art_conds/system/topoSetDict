@@ -1,0 +1,142 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  v2306                                 |
+|   \\  /    A nd           | Website:  www.openfoam.com                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    object      topoSetDict;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+actions
+(
+{
+    name outletA; // A_e portion
+    type cellSet;
+    action new;
+    source zoneToCell;
+    sourceInfo
+    {
+    zone block4;
+    }
+}
+{
+    name outletB;
+    type cellSet;
+    action new;
+    source zoneToCell;
+    sourceInfo
+    {
+    zone block5;
+    }
+}
+
+
+// convert to faces
+{
+    name outlet90;
+    type faceSet;
+    action new;
+    source cellToFace;
+    sourceInfo
+    {
+    set outletA;
+    option all;
+    }
+}
+// get the common subset
+{
+    name outlet90;
+    type faceSet;
+    action subset;
+    source cellToFace;
+    sourceInfo
+    {
+    set outletB;
+    option all;
+    }
+}
+
+
+// convert to a Zone
+{
+    name outlet90;
+    type faceZoneSet;
+    action new;
+    source setToFaceZone;
+    sourceInfo
+    {
+    faceSet outlet90;
+    }
+}
+
+
+// A_i portion
+
+{
+    name outletC;
+    type cellSet;
+    action new;
+    source zoneToCell;
+    sourceInfo
+    {
+    zone block2;
+    }
+}
+{
+    name outletD;
+    type cellSet;
+    action new;
+    source zoneToCell;
+    sourceInfo
+    {
+    zone block3;
+    }
+}
+
+
+// convert to faces
+{
+    name inlet52;
+    type faceSet;
+    action new;
+    source cellToFace;
+    sourceInfo
+    {
+    set outletC;
+    option all;
+    }
+}
+// get the common subset
+{
+    name inlet52;
+    type faceSet;
+    action subset;
+    source cellToFace;
+    sourceInfo
+    {
+    set outletD;
+    option all;
+    }
+}
+
+
+// convert to a Zone
+{
+    name inlet52;
+    type faceZoneSet;
+    action new;
+    source setToFaceZone;
+    sourceInfo
+    {
+    faceSet inlet52;
+    }
+}
+);
+// ************************************************************************* //

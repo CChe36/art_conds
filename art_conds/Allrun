@@ -1,0 +1,41 @@
+#!/bin/bash 
+
+#SBATCH --nodes=1
+#SBATCH --ntasks-per-node=8
+#SBATCH --cpus-per-task=1
+#SBATCH --time=60:00:00
+#SBATCH --mem=8GB
+#SBATCH --job-name=art_conds
+#SBATCH --mail-type=BEGIN,END,FAIL
+#SBATCH --mail-user=chc675@nyu.edu
+
+module purge
+
+module load openmpi/intel/4.1.1
+
+rm -rf processor[0-7]
+rm -rf 0.[0-9]*[0-9]
+rm -rf blockMesh.log
+rm -rf checkMesh.log
+rm -rf decomposePar.log
+rm -rf topoSet.log
+rm -rf rhoCentralFoam.log
+rm -rf postProcessing
+
+wrapper=/scratch/work/public/singularity/run-opencfd-openfoam-2306.bash
+
+${wrapper} blockMesh > ./blockMesh.log || exit 1 
+${wrapper} checkMesh > ./checkMesh.log || exit 1
+${wrapper} topoSet > ./topoSet.log || exit 1
+${wrapper} decomposePar > ./decomposePar.log || exit 1
+mpirun ${wrapper} rhoCentralFoam -parallel > rhoCentralFoam.log || exit 1
+${wrapper} reconstructPar > ./reconsructPar.log || exit 1
+${wrapper} rhoCentralFoam -postProcess -func MachNo > ./Mach.log || exit 1
+
+
+
+
+
+
+
+

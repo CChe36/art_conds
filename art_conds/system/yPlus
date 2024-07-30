@@ -1,0 +1,9 @@
+type            yPlus;
+libs            (fieldFunctionObjects);
+
+writeFields	no;
+
+executeControl      writeTime;
+executeInterval     1;
+writeControl        writeTime;
+writeInterval       1;

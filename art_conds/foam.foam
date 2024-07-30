@@ -1,0 +1,12 @@
+decomposed
+blockMesh
+trying vanLeer
+expanded domain
+freestream initial conditions
+viscous - make sure to change mu in thermophysicalProps to not 0
+
+expanded domain, constant back pressure like in https://doi.org/10.2514/1.B35699
+
+updated blockMesh hoping to fix yPlus
+
+updating initial conditions to match articles

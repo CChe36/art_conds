@@ -1,0 +1,18 @@
+type            surfaceFieldValue;
+libs            (fieldFunctionObjects);
+
+regionType      patch;
+name            outlet1;
+operation       weightedAverage;
+weightField     p;
+writeFields     no;
+
+executeControl      writeTime;
+executeInterval     1;
+writeControl        writeTime;
+writeInterval       1;
+
+fields
+(
+    p
+);

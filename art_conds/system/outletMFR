@@ -1,0 +1,18 @@
+type            surfaceFieldValue;
+libs            (fieldFunctionObjects);
+enabled         true;
+
+executeControl      writeTime;
+executeInterval     1;
+writeControl        writeTime;
+writeInterval       1;
+
+log             true;
+writeFields     false;
+regionType      patch;
+name            outlet1;
+operation       sum;
+fields
+(
+    phi
+);
